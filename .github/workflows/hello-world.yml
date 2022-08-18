@@ -14,7 +14,7 @@ env:
   # git_commit: ${{github.sha}} # BLA
 jobs:
   Clone-down:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     container: gradle:6-jdk11
     steps:
       - name: Clone-down
@@ -25,7 +25,7 @@ jobs:
           name: code
           path: .
   Build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     container: gradle:6-jdk11
     needs: [Clone-down]
     steps:
@@ -49,7 +49,7 @@ jobs:
       #     name: build
       #     path: app/build/libs/app-0.1-all.jar  
   Docker-image:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [Build]
     steps:
       - name: Download Repo
@@ -67,7 +67,7 @@ jobs:
           name: code
           path: .
   Component-test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [Docker-image]
     steps:
       - name: Download Repo
@@ -78,7 +78,7 @@ jobs:
       - name: Execute component test
         run: chmod +x ci/component-test.sh && GIT_COMMIT="GA-$GITHUB_SHA" && ci/component-test.sh
   Performance-test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [Docker-image]
     steps:
       - name: Download Repo
